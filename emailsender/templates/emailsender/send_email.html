@@ -1,0 +1,212 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Email Sender</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+ 
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            padding: 15px 50px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0077b6;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #0077b6;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .nav-links a:hover {
+            color: #00b4d8;
+        }
+ 
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0077b6, #00b4d8);
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+        .hero h1 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        .btn-primary {
+            background: #ffffff;
+            color: #0077b6;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-primary:hover {
+            background: #e0e0e0;
+        }
+ 
+        /* Common Section Style */
+        .section-box {
+            display: none;
+            padding: 40px;
+            max-width: 600px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .section-box h2 {
+            color: #0077b6;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        button {
+            background: #0077b6;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #00b4d8;
+        }
+ 
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: #f9f9f9;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <header class="navbar">
+        <div class="logo">Email Sender</div>
+        <div class="nav-links">
+            <a onclick="showHome()">Home</a>
+            <a onclick="showAbout()">About Us</a>
+            <a onclick="showHelp()">Help</a>
+        </div>
+    </header>
+ 
+    <!-- Homepage -->
+    <section class="hero" id="heroSection">
+        <h1>Welcome to Email Sender</h1>
+        <p>Send emails easily and securely with our simple interface.</p>
+        <button class="btn-primary" onclick="showEmailForm()">Click Here to Send an Email</button>
+    </section>
+ 
+    <!-- Email Form -->
+    <section class="section-box" id="emailFormSection">
+        <h2>Send an Email</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Send Email</button>
+            <button type="button" onclick="showHome()">Cancel</button>
+        </form>
+    </section>
+ 
+    <!-- About Us -->
+    <section class="section-box" id="aboutSection">
+        <h2>About Us</h2>
+        <p>
+            Email Sender is a simple and secure platform that allows you to send emails quickly.
+            Our mission is to make communication easy and efficient for everyone.
+        </p>
+        <button onclick="showHome()">Back to Home</button>
+    </section>
+ 
+    <!-- Help -->
+    <section class="section-box" id="helpSection">
+        <h2>Help</h2>
+        <p>
+            Need assistance? Here are some tips:
+            <ul>
+                <li>Click "Home" to return to the main page.</li>
+                <li>Click "Click Here to Send an Email" to open the email form.</li>
+                <li>Fill in recipient, subject, and message, then click "Send Email".</li>
+            </ul>
+        </p>
+        <button onclick="showHome()">Back to Home</button>
+    </section>
+ 
+    <!-- Footer -->
+    <footer>
+        &copy; 2025 Email Sender. All rights reserved.
+    </footer>
+ 
+    <script>
+        function hideAll() {
+            document.getElementById('heroSection').style.display = 'none';
+            document.getElementById('emailFormSection').style.display = 'none';
+            document.getElementById('aboutSection').style.display = 'none';
+            document.getElementById('helpSection').style.display = 'none';
+        }
+ 
+        function showHome() {
+            hideAll();
+            document.getElementById('heroSection').style.display = 'flex';
+        }
+ 
+        function showEmailForm() {
+            hideAll();
+            document.getElementById('emailFormSection').style.display = 'block';
+        }
+ 
+        function showAbout() {
+            hideAll();
+            document.getElementById('aboutSection').style.display = 'block';
+        }
+ 
+        function showHelp() {
+            hideAll();
+            document.getElementById('helpSection').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
