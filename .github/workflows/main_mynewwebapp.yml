@@ -1,0 +1,57 @@
+name: Deploy Django App to Azure Web App - mynewwebapp
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    env:
+      PYTHON_VERSION: "3.10"                 # Recommended/stable for Django on App Service
+      APP_NAME: "mynewwebapp"                # <-- your Web App
+      DJANGO_SETTINGS_MODULE: "emailproject.settings"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Optional but recommended if you use STATICFILES
+      - name: Collect static files
+        run: |
+          python manage.py collectstatic --noinput || echo "collectstatic skipped"
+
+      # IMPORTANT: zip the CONTENTS of the repo root (not the folder itself)
+      - name: Create deployment package
+        shell: bash
+        run: |
+          shopt -s dotglob
+          zip -r release.zip * -x '*.git*' -x '*__pycache__*' -x 'antenv/*'
+
+      - name: Upload artifact (for reference)
+        uses: actions/upload-artifact@v4
+        with:
+          name: django-build
+          path: release.zip
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.APP_NAME }}
+          slot-name: "production"    # MUST be lowercase
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_ABAEC5F4B4E245BF83CB781A031E7DD9  }}  # <-- use the exact secret name you created
+          package: release.zip
